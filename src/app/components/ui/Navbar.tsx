@@ -14,14 +14,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const pages = ['Rooms', 'Roommies'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
-    //const navigate = useRouter();
+    const router = useRouter();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -84,9 +84,9 @@ function Navbar() {
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page}>
-                                    <Link href={`/${page.toLowerCase()}`} passHref>
+                                    
                                         <Typography textAlign="center">{page}</Typography>
-                                    </Link>
+                                    
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -112,13 +112,14 @@ function Navbar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
+                            <Link href={`/${page.toLowerCase()}`} key={page}>
+                                <Button
+                                    key={page}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    {page}
+                                </Button>
+                            </Link>
                         ))}
                     </Box>
 
