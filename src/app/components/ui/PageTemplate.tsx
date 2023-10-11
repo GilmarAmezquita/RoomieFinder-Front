@@ -10,7 +10,7 @@ type _TemplateProps = {
 export default function PageTemplate({ children }: _TemplateProps) {
     return (
         <div style={{
-            backgroundColor: 'lightblue',
+            
             height: '100vh',
             width: '100vw',
         }}>

@@ -14,11 +14,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['Rooms', 'Roommies'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
+    //const navigate = useRouter();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -50,10 +53,6 @@ function Navbar() {
                         style={{ marginRight: '1rem' }}
 
                     />
-                    
-                    
-
-
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
@@ -84,13 +83,15 @@ function Navbar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
+                                <MenuItem key={page}>
+                                    <Link href={`/${page.toLowerCase()}`} passHref>
+                                        <Typography textAlign="center">{page}</Typography>
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
                     </Box>
-                    
+
                     <Typography
                         variant="h5"
                         noWrap
