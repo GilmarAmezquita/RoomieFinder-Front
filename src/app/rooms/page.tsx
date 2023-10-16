@@ -1,6 +1,7 @@
 import PageTemplate from "../components/ui/PageTemplate"
 import RoomCard from "../components/rooms/RoomCard"
 import styles from "../styles/rooms.module.css"
+import FilterBar from "../components/ui/FiltersBar"
 
 const rooms = [
     {
@@ -29,19 +30,22 @@ const rooms = [
 export default function Page() {
     return (
         <PageTemplate>
-            <div className={styles.container}> 
+            <div className={styles.container}>
                 <h1>Rooms</h1>
-                <div className={styles.roomsContainer}>
-                    {rooms.map((room) => (
-                        <RoomCard
-                            key={room.title}
-                            title={room.title}
-                            description={room.description}
-                            image={room.image}
-                            price={room.price}
-                            personalAttributes={room.personalAttributes}
-                        />
-                    ))}
+                <div style={{ display: 'flex', flexDirection: 'row' ,width:'100%',height:'100%', paddingLeft:'1rem'}}>
+                    <FilterBar />
+                    <div className={styles.roomsContainer}>
+                        {rooms.map((room) => (
+                            <RoomCard
+                                key={room.title}
+                                title={room.title}
+                                description={room.description}
+                                image={room.image}
+                                price={room.price}
+                                personalAttributes={room.personalAttributes}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </PageTemplate>
