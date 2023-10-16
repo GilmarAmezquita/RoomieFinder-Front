@@ -22,6 +22,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
     const router = useRouter();
+    const session = false;
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -40,6 +41,52 @@ function Navbar() {
         setAnchorElUser(null);
     };
 
+    const renderUser = () => {
+        if (session) {
+            return (
+                <Box sx={{ flexGrow: 0 }}>
+                    <Tooltip title="Open settings">
+                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        sx={{ mt: '45px' }}
+                        id="menu-appbar"
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                    >
+                        {settings.map((setting) => (
+                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                <Typography textAlign="center">{setting}</Typography>
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                </Box>
+            )
+        } else {
+            return(
+                <Link href="/login">
+                    <Button
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                    >
+                        Login
+                    </Button>
+                </Link>
+            )
+        }
+    }
+
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -50,7 +97,8 @@ function Navbar() {
                         width={100}
                         height={30}
                         quality={100}
-                        style={{ marginRight: '1rem' }}
+                        style={{ marginRight: '1rem' ,cursor: 'pointer'}}
+                        onClick={() => { router.push('/') }}
 
                     />
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -84,32 +132,13 @@ function Navbar() {
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page}>
-                                    
-                                        <Typography textAlign="center">{page}</Typography>
-                                    
+
+                                    <Typography textAlign="center">{page}</Typography>
+
                                 </MenuItem>
                             ))}
                         </Menu>
                     </Box>
-
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href="#app-bar-with-responsive-menu"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
                             <Link href={`/${page.toLowerCase()}`} key={page}>
@@ -122,36 +151,9 @@ function Navbar() {
                             </Link>
                         ))}
                     </Box>
+                    {renderUser()}
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
+
                 </Toolbar>
             </Container>
         </AppBar>
