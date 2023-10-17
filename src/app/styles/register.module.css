@@ -6,12 +6,11 @@
     height: 92.6vh;
     width: 100vw;
     background:
-      /* top, transparent black, faked with gradient */
-      linear-gradient(rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0.7)),
-      /* bottom, image */
-      url('../../../public/99z_2206_w009_n001_150b_p14_150.jpg')
-      ;
+        /* top, transparent black, faked with gradient */
+        linear-gradient(rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0.7)),
+        /* bottom, image */
+        url('../../../public/99z_2206_w009_n001_150b_p14_150.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right;
@@ -19,17 +18,23 @@
     font-size: 1.2rem;
     color: white;
     text-align: center;
-    
-  }
 
-  .form{
-    height: 60vh;
+}
+
+.form {
+    height: 65vh;
     width: 30vw;
     background-color: white;
     color: black;
     border-radius: 15px;
     padding: 3rem;
     position: relative;
-  }
-  
-  
+}
+
+.options {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}

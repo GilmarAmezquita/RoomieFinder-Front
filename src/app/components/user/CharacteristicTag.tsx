@@ -23,7 +23,8 @@ export default function CharacteristicTag(props: CharacteristicTagProps) {
             cursor: 'pointer',
             backgroundColor: props.selected === props.name ? 'black' : 'white',
             color: props.selected === props.name ? 'white' : 'black',
-            marginRight: '0.5rem'
+            marginRight: '0.5rem',
+            marginBottom: '0.5rem'
         }}
         onClick={() => props.setSelected(props.name)}
         >
