@@ -10,8 +10,9 @@ type _TemplateProps = {
 export default function PageTemplate({ children }: _TemplateProps) {
     return (
         <div style={{
-            
-            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
             width: '100vw',
         }}>
         <Navbar />
