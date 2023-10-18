@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import CharacteristicTag from "../components/user/CharacteristicTag";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signUp } from "../services/auth";
 
 const personalities = [
     { code: "ISTJ", name: "Inspector", emoji: "👮‍♂️" },
@@ -70,6 +71,24 @@ export default function Register() {
             alert("Please fill out all fields");
             console.log(name, email, password, phoneNumber, routine, cleanliness, pets, specialNeeds, personality, sociability, noise);
         }
+        signUp({
+            name,
+            email,
+            password,
+            phoneNumber,
+            routine,
+            cleanliness,
+            pets,
+            specialNeeds,
+            personality,
+            sociability,
+            noise
+        }).then((res) => {
+            console.log(res);
+            router.push("/login");
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     const changeStep = (step: number, direction: number) => {
