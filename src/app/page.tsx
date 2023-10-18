@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styles from './page.module.css'
 import PageTemplate from './components/ui/PageTemplate'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 
 export default function Home() {
   return (
@@ -9,10 +9,12 @@ export default function Home() {
       <div className={styles.container}>
         <main className={styles.main}>
           <section className={styles.information}>
-            <h1 className={styles.title}>
+            <Typography variant="h2" component="h1" gutterBottom align='left' color='black'>
               Find your perfect roommie
-            </h1>
-            <h3 className={styles.subtitle}>Make MATCH with the best roomie</h3>
+            </Typography>
+            <Typography variant="h6" component="h5" gutterBottom align='left' color='black'>
+              We are here to help you find your perfect roommie. We have a lot of roommies waiting for you to find them.
+            </Typography>
             <Button variant="contained" color="primary" size="large" style={{ marginTop: '2rem', borderRadius: 10 }}>
               Get Started
             </Button>
