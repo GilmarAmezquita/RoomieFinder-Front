@@ -70,6 +70,33 @@ export default function Register() {
         if (name == "" || email == "" || password == "" || phoneNumber == "" || routine == "" || cleanliness == "" || pets == "" || specialNeeds == "" || personality == "" || sociability == "" || noise == "") {
             alert("Please fill out all fields");
             console.log(name, email, password, phoneNumber, routine, cleanliness, pets, specialNeeds, personality, sociability, noise);
+        }else{
+            fetch("http://localhost:3000/api/user/register", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password,
+                    phoneNumber: phoneNumber,
+                    routine: routine,
+                    cleanliness: cleanliness,
+                    pets: pets,
+                    specialNeeds: specialNeeds,
+                    personality: personality,
+                    sociability: sociability,
+                    noise: noise
+                })
+            }).then((res) => {
+                if (res.status == 200) {
+                    router.push("/login");
+                } else {
+                    alert("Error registering");
+                }
+            })
+            
         }
         signUp({
             name,
