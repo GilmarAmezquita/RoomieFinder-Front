@@ -17,7 +17,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const pages = ['Rooms', 'Roommies'];
+const pages = ['Rooms', 'Roomies'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
@@ -88,7 +88,7 @@ function Navbar() {
     }
 
     return (
-        <AppBar position="static">
+        <AppBar position="sticky">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Image
