@@ -56,11 +56,7 @@ export default function FilterBar(){
                     </Typography>
                 </LocationContainer>
             ))}
-            <Divider />
-            <Typography variant="h6" component="div">
-                Room Attributes
-            </Typography>
-
+            
         </div>
     )
 }

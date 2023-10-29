@@ -26,26 +26,26 @@ const MatchTag = styled.div`
     color: white;
     padding: 0.5rem;
     border-radius: 2rem;
-    margin-bottom: -50px;
-    z-index: 1;
-    
+    margin-top: -50px;
+    margin-left: 10px;
 `;
 
 export default function RoomCard(props: Props) {
     if (props.match) {
         return (
             <Card sx={{ width: 300, margin: '1rem' }}>
+                
+                <CardMedia
+                    sx={{ height: 140}}
+                    image={props.image}
+                    title="Room Image"
+                />
                 <MatchTag>
                     <WhatshotIcon />
                     <Typography variant="body1" color="white" fontWeight="bold">
                         Match
                     </Typography>
                 </MatchTag>
-                <CardMedia
-                    sx={{ height: 140 ,zIndex:2}}
-                    image={props.image}
-                    title="Room Image"
-                />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {props.title}
