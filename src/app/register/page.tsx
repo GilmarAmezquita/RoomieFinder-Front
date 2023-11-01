@@ -1,31 +1,14 @@
 'use client'
 import styles from "../styles/register.module.css"
 import PageTemplate from "../components/ui/PageTemplate"
-import { Button, IconButton, Typography, TextField, Autocomplete } from "@mui/material";
-import { useRef, useState } from "react";
+import { Button, Typography, TextField } from "@mui/material";
+import { alertError, alertSuccess } from "../components/alerts/alert";
+import { useEffect, useState } from "react";
 import CharacteristicTag from "../components/user/CharacteristicTag";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { getAllPersonalities } from "../services/formDataConsult";
 import { signUp } from "../services/auth";
-
-const personalities = [
-    { code: "ISTJ", name: "Inspector", emoji: "👮‍♂️" },
-    { code: "ISFJ", name: "Protector", emoji: "🛡️" },
-    { code: "INFJ", name: "Counselor", emoji: "🔮" },
-    { code: "INTJ", name: "Architect", emoji: "🏗️" },
-    { code: "ISTP", name: "Virtuoso", emoji: "🔧" },
-    { code: "ISFP", name: "Adventurer", emoji: "🌍" },
-    { code: "INFP", name: "Mediator", emoji: "☮️" },
-    { code: "INTP", name: "Logician", emoji: "🤓" },
-    { code: "ESTP", name: "Entrepreneur", emoji: "💼" },
-    { code: "ESFP", name: "Entertainer", emoji: "🎉" },
-    { code: "ENFP", name: "Campaigner", emoji: "🛡️" },
-    { code: "ENTP", name: "Innovator", emoji: "🚀" },
-    { code: "ESTJ", name: "Supervisor", emoji: "👔" },
-    { code: "ESFJ", name: "Caregiver", emoji: "🤝" },
-    { code: "ENFJ", name: "Protagonist", emoji: "🌟" },
-    { code: "ENTJ", name: "Commander", emoji: "👔" }
-];
 
 const personalityDictionary = {
     "ISTJ": "Inspector",
@@ -46,12 +29,8 @@ const personalityDictionary = {
     "ENTJ": "Commander"
 };
 
-
-
-
-
 export default function Register() {
-    const router = useRouter();
+    const [personalities, setPersonalities] = useState([]);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -65,57 +44,41 @@ export default function Register() {
     const [sociability, setSociability] = useState("");
     const [noise, setNoise] = useState("");
 
+    const router = useRouter();
+
+    useEffect(() => {
+        getAllPersonalities().then((res) => {
+            setPersonalities(res.data);
+        }
+        ).catch((err) => {
+            console.log(err);
+        })
+    }, []);
 
     const handleRegister = () => {
         if (name == "" || email == "" || password == "" || phoneNumber == "" || routine == "" || cleanliness == "" || pets == "" || specialNeeds == "" || personality == "" || sociability == "" || noise == "") {
-            alert("Please fill out all fields");
+            alertError("Please fill out all fields");
             console.log(name, email, password, phoneNumber, routine, cleanliness, pets, specialNeeds, personality, sociability, noise);
         }else{
-            fetch("http://localhost:3000/api/user/register", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    password: password,
-                    phoneNumber: phoneNumber,
-                    routine: routine,
-                    cleanliness: cleanliness,
-                    pets: pets,
-                    specialNeeds: specialNeeds,
-                    personality: personality,
-                    sociability: sociability,
-                    noise: noise
-                })
-            }).then((res) => {
-                if (res.status == 200) {
-                    router.push("/login");
-                } else {
-                    alert("Error registering");
-                }
+            signUp({
+                name,
+                email,
+                password,
+                phoneNumber,
+                routine,
+                cleanliness,
+                pets,
+                specialNeeds,
+                personality,
+                sociability,
+                noise
+            }).then(() => {
+                alertSuccess("Successfully registered!");
+                router.push("/login");
+            }).catch((err) => {
+                alertError("User already exists");
             })
-            
         }
-        signUp({
-            name,
-            email,
-            password,
-            phoneNumber,
-            routine,
-            cleanliness,
-            pets,
-            specialNeeds,
-            personality,
-            sociability,
-            noise
-        }).then((res) => {
-            console.log(res);
-            router.push("/login");
-        }).catch((err) => {
-            console.log(err);
-        })
     }
 
     const changeStep = (step: number, direction: number) => {
