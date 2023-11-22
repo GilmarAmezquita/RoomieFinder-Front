@@ -5,41 +5,88 @@ import styled from "styled-components"
 
 const persons = [
     {
+        id: "1",
         name: "John",
-        image: "https://images.unsplash.com/photo-1632216307834-9a0b8d0e9d8f?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2N3x8fGVufDB8fHx8&ixlib=rb-1.2.1&w=1000&q=80",
+        image: "https://img.freepik.com/free-photo/outdoor-shot-young-caucasian-man-with-beard-relaxing-open-air-surrounded-by-beautiful-mountain-setting-rainforest_273609-1855.jpg?w=1380&t=st=1700666688~exp=1700667288~hmac=5090a38a93c6323878a28a160b2e3675d0389f524788238a172789fceb4969e4",
         personalAttributes: ["Clean", "Friendly", "Outgoing"],
-        match: true
+        university: "University of Toronto",
     },
     {
+        id: "2",
         name: "Mary",
-        image: "https://images.unsplash.com/photo-1632216307834-9a0b8d0e9d8f?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2N3x8fGVufDB8fHx8&ixlib=rb-1.2.1&w=1000&q=80",
+        image: "https://img.freepik.com/free-photo/portrait-caucasian-woman-smiling_53876-146505.jpg?w=996&t=st=1700666698~exp=1700667298~hmac=d2496e7c996cdc00fbfbd0be9e3fc0238900bda2c27d0d57b8a97dcb0b548668",
         personalAttributes: ["Clean", "Friendly", "Outgoing"],
-        match: false
+        university: "University of Toronto",
     },
     {
+        id: "3",
         name: "Jane",
-        image: "https://images.unsplash.com/photo-1632216307834-9a0b8d0e9d8f?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2N3x8fGVufDB8fHx8&ixlib=rb-1.2.1&w=1000&q=80",
+        image: "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?w=996&t=st=1700666710~exp=1700667310~hmac=89403d752f3ededc2bb2da246910809c3d1e2f40beca05bb19ed8f728eeea393",
         personalAttributes: ["Clean", "Friendly", "Outgoing"],
-        match: false
+        university: "University of Toronto",
     },
     {
+        id: "4",
         name: "Joe",
-        image: "https://images.unsplash.com/photo-1632216307834-9a0b8d0e9d8f?ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2N3x8fGVufDB8fHx8&ixlib=rb-1.2.1&w=1000&q=80",
+        image: "https://img.freepik.com/free-photo/beautiful-woman-dreaming-cyber-monday-sales_23-2148313194.jpg?w=826&t=st=1700666733~exp=1700667333~hmac=726e753ccfcc192a4a864ac3cf2ab9d160954a41a7d58beb4a7e52ed328e97aa",
         personalAttributes: ["Clean", "Friendly", "Outgoing"],
-        match: false
+        university: "University of Toronto",
     }
 ]
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+    width: 100vw;
+    background-color: rgb(228, 228, 228);
+    padding: 2rem;
+    
+`;
+
+const Title = styled.div`
+    font-size: 2rem;
+    font-weight: 600;
+    color: black;
+    margin-bottom: 2rem;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+`;
+
+const CardContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin-bottom: 2rem;
+`;
+
+
 export default function Page() {
-    return(
+    return (
         <PageTemplate>
-            {persons.map((person) => (
-                <PersonCard
-                    image={person.image}
-                    personalAttributes={person.personalAttributes}
-                    match={person.match}
-                />    
-            ))}
+            <Container>
+                <Title><h3>Find your perfect roommie</h3></Title>
+                <CardContainer>
+                    {persons.map((person) => (
+                        <PersonCard
+                            key={person.id}
+                            id = {person.id}
+                            name={person.name}
+                            image={person.image}
+                            personalAttributes={person.personalAttributes}
+                            university={person.university}
+                        />
+                    ))}
+                </CardContainer>
+            </Container>
         </PageTemplate>
     )
 }
