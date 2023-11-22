@@ -15,6 +15,7 @@ type Props = {
     price: number;
     personalAttributes: string[];
     match: boolean;
+    id: string;
 };
 
 const MatchTag = styled.div`
@@ -33,7 +34,11 @@ const MatchTag = styled.div`
 export default function RoomCard(props: Props) {
     if (props.match) {
         return (
-            <Card sx={{ width: 300, margin: '1rem' }}>
+            <Card sx={{ width: 300, margin: '1rem',cursor:'pointer' }}
+            onClick={() => {
+                window.location.href = "/rooms/" + props.id;
+            }}
+            >
                 
                 <CardMedia
                     sx={{ height: 140}}
@@ -58,14 +63,16 @@ export default function RoomCard(props: Props) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" variant="contained">Contact</Button>
-                    <Button size="small">Learn More</Button>
+                    
                 </CardActions>
             </Card>
         );
     } else {
         return (
-            <Card sx={{ width: 300, margin: '1rem' }}>
+            <Card sx={{ width: 300, margin: '1rem',cursor:'pointer' }}
+            onClick={() => {
+                window.location.href = "/rooms/" + props.id;
+            }}>
                 <CardMedia
                     sx={{ height: 140 }}
                     image={props.image}
@@ -83,8 +90,7 @@ export default function RoomCard(props: Props) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" variant="contained">Contact</Button>
-                    <Button size="small">Learn More</Button>
+                    
                 </CardActions>
             </Card>
         );
