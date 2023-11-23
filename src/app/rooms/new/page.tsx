@@ -2,12 +2,13 @@
 import PageTemplate from "@/app/components/ui/PageTemplate"
 import { MenuItem, TextField, Button } from "@mui/material";
 import styled from "styled-components"
-import { FaBath, FaGraduationCap } from "react-icons/fa6";
+import { FaBath } from "react-icons/fa6";
 import { FaRulerCombined } from "react-icons/fa6";
 import { FaCubes } from "react-icons/fa6";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-
+import endpoints from "@/app/config/endpoints";
+import instance from "@/app/config/axios";
 
 const bathOptions = [
     "Private",
@@ -101,15 +102,76 @@ const VisuallyHiddenInput = styled.input`
 
 
 export default function Page() {
-    const [images, setImages] = useState<string[]>([]);
+    const [images, setImages] = useState<File[]>([]);
+    const [imagesBase64, setImagesBase64] = useState<string[]>([]);
+    const titleRef = useRef<any>("");
+    const priceRef = useRef<any>("");
+    const bathroomRef = useRef<any>("");
+    const spaceRef = useRef<any>("");
+    const wardrobeRef = useRef<any>("");
+    const addressRef = useRef<any>("");
+    const descriptionRef = useRef<any>("");
+
+    const handleSubmit = () => {
+        const title = titleRef.current.value;
+        const price = priceRef.current.value;
+        const bathroom = bathroomRef.current.value;
+        const space = spaceRef.current.value;
+        const wardrobe = wardrobeRef.current.value;
+        const address = addressRef.current.value;
+        const description = descriptionRef.current.value;
+
+        const data = {
+            title,
+            price,
+            bathroom,
+            space,
+            wardrobe,
+            address,
+            description,
+            images
+        };
+        if (title === "" || price === "" || bathroom === "" || space === "" || wardrobe === "" || address === "" || description === "" || images.length === 0) {
+            alert("Please fill all the fields");
+            return;
+        } else {
+            Promise.all(images.map(blobToBase64)).then((results) => { 
+                setImagesBase64(results.map((result:any) => result.toString())); 
+            });
+
+
+            /**instance.post(endpoints.newRoom, data).then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.log(error);
+            });**/
+        }
+
+
+    }
+
+
+    function blobToBase64(blob: any) {
+        return new Promise((resolve, _) => {
+            const reader = new FileReader();
+            reader.onerror = () => {
+                resolve(null)
+                console.log("error");
+            };
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+            
+        });
+    }
+
     return (
         <PageTemplate>
             <Container>
                 <General>
                     <Information>
                         <Title>Publish your room</Title>
-                        <TextField id="outlined-basic" label="Title" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} />
-                        <TextField id="outlined-basic" label="Price" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} />
+                        <TextField id="outlined-basic" label="Title" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} inputRef={titleRef} />
+                        <TextField id="outlined-basic" label="Price" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} inputRef={priceRef} />
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: '100%', marginBottom: '2rem' }}>
                             <FaBath style={{ fontSize: '2rem', color: 'rgb(106, 158, 255)', marginRight: '1rem' }} />
                             <TextField
@@ -119,6 +181,7 @@ export default function Page() {
                                 defaultValue="Private"
                                 helperText="Select bathroom type"
                                 sx={{ minWidth: '15%' }}
+                                inputRef={bathroomRef}
                             >
                                 {bathOptions.map((option) => (
                                     <MenuItem key={option} value={option}>
@@ -128,7 +191,7 @@ export default function Page() {
                             </TextField>
 
                             <FaRulerCombined style={{ fontSize: '2rem', color: 'rgb(106, 158, 255)', marginRight: '1rem', marginLeft: '2rem' }} />
-                            <TextField id="outlined-basic" label="Space" variant="outlined" sx={{ maxWidth: '20%' }} helperText="Space of the room" />
+                            <TextField id="outlined-basic" label="Space" variant="outlined" sx={{ maxWidth: '20%' }} helperText="Space of the room" inputRef={spaceRef} />
 
                             <FaCubes style={{ fontSize: '2rem', color: 'rgb(106, 158, 255)', marginRight: '1rem', marginLeft: '2rem' }} />
                             <TextField
@@ -138,6 +201,7 @@ export default function Page() {
                                 defaultValue="Yes"
                                 helperText="Select if has wardrobe"
                                 sx={{ minWidth: '15%' }}
+                                inputRef={wardrobeRef}
                             >
                                 {wardrobeOptions.map((option) => (
                                     <MenuItem key={option} value={option}>
@@ -146,10 +210,14 @@ export default function Page() {
                                 ))}
                             </TextField>
                         </div>
-                        <TextField id="outlined-basic" label="Address" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} />
-                        <TextField id="outlined-basic" label="Description" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} multiline rows={3} />
+                        <TextField id="outlined-basic" label="Address" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} inputRef={addressRef} />
+                        <TextField id="outlined-basic" label="Description" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} multiline rows={3} inputRef={descriptionRef} />
                         <div>
-                            <Button variant="contained" sx={{ backgroundColor: 'rgb(106, 158, 255)', color: 'white', marginRight: '1rem' }}>
+                            <Button
+                                variant="contained"
+                                sx={{ backgroundColor: 'rgb(106, 158, 255)', color: 'white', marginRight: '1rem' }}
+                                onClick={handleSubmit}
+                            >
                                 Publish
                             </Button>
                             <Link href="/rooms">
@@ -163,8 +231,8 @@ export default function Page() {
                     <Images>
                         <Title>Images</Title>
                         {images.map((image) => (
-                            <ImageFile>
-                                {image}
+                            <ImageFile key={image.name}>
+                                {image.name}
                                 <div style={{ display: 'flex', flexGrow: 1 }}></div>
                                 <Button variant="contained" sx={{ backgroundColor: 'rgb(255, 255, 255)', color: 'black', marginRight: '1rem' }}
                                     onClick={() => {
@@ -184,12 +252,15 @@ export default function Page() {
                                 onChange={(event) => {
                                     if (event.target.files && event.target.files[0]) {
                                         const file = event.target.files[0];
-                                        setImages([...images, file.name]);
+                                        setImages([...images, file]);
                                     }
 
                                 }}
                             />
                             Add image
+                        </Button>
+                        <Button onClick={() => console.log(imagesBase64)}>
+                            check
                         </Button>
                     </Images>
                 </General>

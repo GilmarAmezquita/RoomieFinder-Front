@@ -10,24 +10,174 @@ import Link from "next/link";
 import { getAllPersonalities } from "../services/formDataConsult";
 import { signUp } from "../services/auth";
 
-const personalityDictionary = {
-    "ISTJ": "Inspector",
-    "ISFJ": "Protector",
-    "INFJ": "Counselor",
-    "INTJ": "Architect",
-    "ISTP": "Virtuoso",
-    "ISFP": "Adventurer",
-    "INFP": "Mediator",
-    "INTP": "Logician",
-    "ESTP": "Entrepreneur",
-    "ESFP": "Entertainer",
-    "ENFP": "Campaigner",
-    "ENTP": "Innovator",
-    "ESTJ": "Supervisor",
-    "ESFJ": "Caregiver",
-    "ENFJ": "Protagonist",
-    "ENTJ": "Commander"
-};
+const personalityTraits = [
+    {
+        "name":"Introverted",
+        "icon":"🤫"
+    },
+    {
+        "name":"Extroverted",
+        "icon":"🗣"
+    },
+    {
+        "name":"Early Bird",
+        "icon":"🐦"
+    },
+    {
+        "name":"Night Owl",
+        "icon":"🦉"
+    },
+    {
+        "name":"Clean",
+        "icon":"🧹"
+    },
+    {
+        "name":"Relaxed",
+        "icon":"💫"
+    },
+    {
+        "name":"Love Pets",
+        "icon":"🐶"
+    },
+    {
+        "name":"Far From Pets",
+        "icon":"🙅"
+    },
+    {
+        "name":"Allergies",
+        "icon":"🤧"
+    },
+    {
+        "name":"No Allergies",
+        "icon":"👍"
+    },
+    {
+        "name":"Quiet",
+        "icon":"🤫"
+    },
+    {
+        "name":"Loud",
+        "icon":"🗣"
+    },
+    {
+        "name":"Likes to share",
+        "icon":"🤝"
+    },
+    {
+        "name":"Likes to keep to self",
+        "icon":"🤐"
+    }
+]
+
+const hobbiesOptions = [
+    {
+        "name":"Gym",
+        "icon":"🏋️‍♂️"
+    },
+    {
+        "name":"Sports",
+        "icon":"⚽️"
+    },
+    {
+        "name":"Video Games",
+        "icon":"🎮"
+    },
+    {
+        "name":"Reading",
+        "icon":"📚"
+    },
+    {
+        "name":"Movies",
+        "icon":"🎥"
+    },
+    {
+        "name":"Music",
+        "icon":"🎵"
+    },
+    {
+        "name":"Cooking",
+        "icon":"👨‍🍳"
+    },
+    {
+        "name":"Baking",
+        "icon":"👩‍🍳"
+    },
+    {
+        "name":"Art",
+        "icon":"🎨"
+    },
+    {
+        "name":"Photography",
+        "icon":"📸"
+    },
+    {
+        "name":"Writing",
+        "icon":"✍️"
+    },
+    {
+        "name":"Dancing",
+        "icon":"💃"
+    },
+    {
+        "name":"Singing",
+        "icon":"🎤"
+    },
+    {
+        "name":"Shopping",
+        "icon":"🛍"
+    },
+    {
+        "name":"Traveling",
+        "icon":"🧳"
+    },
+    {
+        "name":"Hiking",
+        "icon":"🥾"
+    },
+    {
+        "name":"Camping",
+        "icon":"⛺️"
+    },
+    {
+        "name":"Gardening",
+        "icon":"🌱"
+    },
+    {
+        "name":"Volunteering",
+        "icon":"🤝"
+    },
+    {
+        "name":"Meditation",
+        "icon":"🧘‍♂️"
+    },
+    {
+        "name":"Yoga",
+        "icon":"🧘‍♀️"
+    },
+    {
+        "name":"Board Games",
+        "icon":"🎲"
+    },
+    {
+        "name":"Card Games",
+        "icon":"🃏"
+    },
+    {
+        "name":"Chess",
+        "icon":"♟"
+    },
+    {
+        "name":"Puzzles",
+        "icon":"🧩"
+    },
+    {
+        "name":"Skiing",
+        "icon":"⛷"
+    },
+]
+
+
+
 
 export default function Register() {
     const [personalities, setPersonalities] = useState([]);
@@ -36,42 +186,24 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [step, setStep] = useState(0);
-    const [routine, setRoutine] = useState("");
-    const [cleanliness, setCleanliness] = useState("");
-    const [pets, setPets] = useState("");
-    const [specialNeeds, setSpecialNeeds] = useState("");
-    const [personality, setPersonality] = useState("");
-    const [sociability, setSociability] = useState("");
-    const [noise, setNoise] = useState("");
+    const [hobbies, setHobbies] = useState([]);
+    const [traits, setTraits] = useState<string[]>([]);
+    const [university, setUniversity] = useState("");
 
     const router = useRouter();
 
-    useEffect(() => {
-        getAllPersonalities().then((res) => {
-            setPersonalities(res.data);
-        }
-        ).catch((err) => {
-            console.log(err);
-        })
-    }, []);
-
     const handleRegister = () => {
-        if (name == "" || email == "" || password == "" || phoneNumber == "" || routine == "" || cleanliness == "" || pets == "" || specialNeeds == "" || personality == "" || sociability == "" || noise == "") {
+        if (name == "" || email == "" || password == "" || phoneNumber == "" || traits.length == 0 || hobbies.length == 0 || university == "") {
             alertError("Please fill out all fields");
-            console.log(name, email, password, phoneNumber, routine, cleanliness, pets, specialNeeds, personality, sociability, noise);
+            
         }else{
             signUp({
                 name,
                 email,
                 password,
                 phoneNumber,
-                routine,
-                cleanliness,
-                pets,
-                specialNeeds,
-                personality,
-                sociability,
-                noise
+                traits,
+                hobbies,
             }).then(() => {
                 alertSuccess("Successfully registered!");
                 router.push("/login");
@@ -114,36 +246,18 @@ export default function Register() {
                         <Typography variant="subtitle1" align="left" gutterBottom>
                             Lifestyle Information
                         </Typography>
-                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
-                            What is your routine like?
-                        </Typography>
-                        <div className={styles.options}>
-                            <CharacteristicTag name="Early Bird" icon="🐦" selected={routine} setSelected={setRoutine} />
-                            <CharacteristicTag name="Night Owl" icon="🦉" selected={routine} setSelected={setRoutine} />
-                        </div>
-                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
-                            How are you with cleanliness?
-                        </Typography>
-                        <div className={styles.options}>
-                            <CharacteristicTag name="Clean" icon="🧹" selected={cleanliness} setSelected={setCleanliness} />
-                            <CharacteristicTag name="Messy" icon="💫" selected={cleanliness} setSelected={setCleanliness} />
-                        </div>
-                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
-                            How do you feel about pets?
-                        </Typography>
-                        <div className={styles.options}>
-                            <CharacteristicTag name="Love" icon="🐶" selected={pets} setSelected={setPets} />
-                            <CharacteristicTag name="Rather Not" icon="🙅" selected={pets} setSelected={setPets} />
-                        </div>
-                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
-                            Any special needs?
-                        </Typography>
-                        <div className={styles.options}>
-                            <CharacteristicTag name="None" icon="✅" selected={specialNeeds} setSelected={setSpecialNeeds} />
-                            <CharacteristicTag name="Allergies" icon="🤧" selected={specialNeeds} setSelected={setSpecialNeeds} />
-                            <CharacteristicTag name="Parking" icon="🚗" selected={specialNeeds} setSelected={setSpecialNeeds} />
-                            <CharacteristicTag name="Smoking" icon="🚭" selected={specialNeeds} setSelected={setSpecialNeeds} />
 
+                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
+                            What university do you attend?
+                        </Typography>
+                        <TextField label="University" variant="outlined" fullWidth margin="normal" value={university} onChange={(e) => setUniversity(e.target.value)} />
+                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
+                            Select some of your personality traits:
+                        </Typography>
+                        <div className={styles.options}>
+                            {personalityTraits.map((personalityItem) => (
+                                <CharacteristicTag name={personalityItem.name} icon={personalityItem.icon} selected={traits} setSelected={setTraits} />
+                            ))}
                         </div>
                     </>
                 )
@@ -151,29 +265,15 @@ export default function Register() {
                 return (
                     <>
                         <Typography variant="subtitle1" align="left" gutterBottom>
-                            Personality Information
+                            Hobbie Information
                         </Typography>
                         <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
-                            Whats your type of personality?: {personalityDictionary[personality as keyof typeof personalityDictionary]}
+                            What do you do in your free time?
                         </Typography>
                         <div className={styles.options}>
-                            {personalities.map((personalityItem) => (
-                                <CharacteristicTag name={personalityItem.code} icon={personalityItem.emoji} selected={personality} setSelected={setPersonality} />
+                            {hobbiesOptions.map((hobbie) => (
+                                <CharacteristicTag name={hobbie.name} icon={hobbie.icon} selected={hobbies} setSelected={setHobbies} />
                             ))}
-                        </div>
-                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
-                            How sociable are you?
-                        </Typography>
-                        <div className={styles.options}>
-                            <CharacteristicTag name="Introvert" icon="🤫" selected={sociability} setSelected={setSociability} />
-                            <CharacteristicTag name="Extrovert" icon="🗣" selected={sociability} setSelected={setSociability} />
-                        </div>
-                        <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
-                            How do you feel about noise?
-                        </Typography>
-                        <div className={styles.options}>
-                            <CharacteristicTag name="Doesn't Matter" icon="🤷" selected={noise} setSelected={setNoise} />
-                            <CharacteristicTag name="Prefer Quiet" icon="🤫" selected={noise} setSelected={setNoise} />
                         </div>
                     </>
                 )

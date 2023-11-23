@@ -56,7 +56,7 @@ export default function PersonCard({ id, name, image, personalAttributes, univer
         </Typography>
         <Personalities>
           {personalAttributes.map((attribute) => (
-            <PersonalityTag>
+            <PersonalityTag key={attribute}>
               <Typography variant="body2" color="text.secondary">
                 {attribute}
               </Typography>

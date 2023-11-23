@@ -2,14 +2,16 @@
 import PageTemplate from "../components/ui/PageTemplate"
 import RoomCard from "../components/rooms/RoomCard"
 import styles from "../styles/rooms.module.css"
-import FilterBar from "../components/rooms/FiltersBar"
+import endpoints from "../config/endpoints"
+import instance from "../config/axios"
 import styled from "styled-components"
 import { Button } from "@mui/material"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 
-const rooms = [
+const roomsDoomy = [
     {
         title: "Room 1",
         description: "This is room 1",
@@ -74,7 +76,15 @@ const Title = styled.div`
 
 
 export default function Page() {
+    const [rooms, setRooms] = useState<any[]>([])
     const router = useRouter()
+
+    useEffect(() => {
+        getRooms().then((rooms) => {
+            setRooms(rooms)
+        })
+    }, [])
+
     return (
         <PageTemplate>
             <div className={styles.container}>
@@ -110,4 +120,11 @@ export default function Page() {
             </div>
         </PageTemplate>
     )
+}
+
+export const getRooms = async () => {
+    //const data = await fetch(endpoints.getAllRooms)
+    //const rooms = await data.json()
+    const rooms = roomsDoomy
+    return rooms
 }

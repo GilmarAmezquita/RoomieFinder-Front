@@ -1,14 +1,23 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 
 type CharacteristicTagProps = {
     name: string,
     icon: string,
-    selected: string,
-    setSelected: (selected: string) => void
+    selected: string[],
+    setSelected: any
 }
 
 export default function CharacteristicTag(props: CharacteristicTagProps) {
+    const [isSelected, setIsSelected] = useState(false)
+
+    useEffect(() => {
+        if (props.selected.includes(props.name)) {
+            setIsSelected(true)
+        } else {
+            setIsSelected(false)
+        }
+    }, [props.selected])
 
     return(
         <div style={{
@@ -21,12 +30,18 @@ export default function CharacteristicTag(props: CharacteristicTagProps) {
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            backgroundColor: props.selected === props.name ? 'black' : 'white',
-            color: props.selected === props.name ? 'white' : 'black',
+            backgroundColor: isSelected ? 'black' : 'white',
+            color: isSelected ? 'white' : 'black',
             marginRight: '0.5rem',
             marginBottom: '0.5rem'
         }}
-        onClick={() => props.setSelected(props.name)}
+        onClick={() => {
+            if (isSelected) {
+                props.setSelected(props.selected.filter((name: string) => name !== props.name))
+            }else {
+                props.setSelected([...props.selected, props.name])
+            }
+        }}
         >
             <p style={{
                 display: 'inline-block',

@@ -248,7 +248,7 @@ export default function RoomDetails({ params }: { params: { id: string } }) {
                             <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap', justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                 {props.user.personalities.map((personality: string) => {
                                     return (
-                                        <PersonalityTag>
+                                        <PersonalityTag key={personality}>
                                             <p style={{ color: 'white', fontWeight: 'normal', fontSize: 13 }}>{personality}</p>
                                         </PersonalityTag>
                                     )
