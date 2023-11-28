@@ -202,12 +202,14 @@ export default function Register() {
                 email,
                 password,
                 phoneNumber,
-                traits,
                 hobbies,
+                traits,
+                university
             }).then(() => {
                 alertSuccess("Successfully registered!");
                 router.push("/login");
             }).catch((err) => {
+                console.log(err);
                 alertError("User already exists");
             })
         }
