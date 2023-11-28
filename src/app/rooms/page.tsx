@@ -80,8 +80,10 @@ export default function Page() {
     const router = useRouter()
 
     useEffect(() => {
-        getRooms().then((rooms) => {
-            setRooms(rooms)
+        instance.get(endpoints.getAllRooms).then((res) => {
+            setRooms(res.data)
+        }).catch((err) => {
+            console.log(err)
         })
     }, [])
 
@@ -103,7 +105,7 @@ export default function Page() {
                                 image={room.image}
                                 price={room.price}
                                 personalAttributes={room.personalAttributes}
-                                match={room.match}
+                                match={false}
                                 id={room.id}
                             />
                         ))}
@@ -120,11 +122,4 @@ export default function Page() {
             </div>
         </PageTemplate>
     )
-}
-
-export const getRooms = async () => {
-    //const data = await fetch(endpoints.getAllRooms)
-    //const rooms = await data.json()
-    const rooms = roomsDoomy
-    return rooms
 }

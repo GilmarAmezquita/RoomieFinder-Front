@@ -9,6 +9,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import endpoints from "@/app/config/endpoints";
 import instance from "@/app/config/axios";
+import { useRouter } from "next/navigation";
 
 const bathOptions = [
     "Private",
@@ -113,6 +114,7 @@ export default function Page() {
     const descriptionRef = useRef<any>("");
 
     const handleSubmit = () => {
+        const router = useRouter();
         const title = titleRef.current.value;
         const price = priceRef.current.value;
         const bathroom = bathroomRef.current.value;
@@ -140,11 +142,13 @@ export default function Page() {
             });
 
 
-            /**instance.post(endpoints.newRoom, data).then((response) => {
+            instance.post(endpoints.newRoom, data).then((response) => {
                 console.log(response);
+                alert("Room published");
+                router.push("/rooms");
             }).catch((error) => {
                 console.log(error);
-            });**/
+            })
         }
 
 

@@ -7,9 +7,10 @@ import { FaCubes } from "react-icons/fa6";
 import { FaRegCircleRight } from "react-icons/fa6";
 import { FaRegCircleLeft } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
+import instance from "@/app/config/axios";
+import endpoints from "@/app/config/endpoints";
 
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import '../../components/loader.css'
 
@@ -146,15 +147,50 @@ const PersonalityTag = styled.div`
     margin: 5px;
 `;
 
+type Params = {
+    params : {
+        id: string
+    }
+}
 
-export default function RoomDetails({ params }: { params: { id: string } }) {
-    const [loading, setLoading] = useState(false);
+
+export default function RoomDetails({params: {id}}: Params) {
+    console.log(id);
+    const [loading, setLoading] = useState(true);
     const [currentImage, setCurrentImage] = useState(0);
+    const [room, setRoom] = useState({
+        title: '',
+        bathroom: '',
+        space: '',
+        wardrobe: '',
+        images: [],
+        price: '',
+        neighborhood: '',
+        location: '',
+        description: '',
+        user: {
+            name: '',
+            city: '',
+            personalities: [],
+            university: '',
+        }
+    });
+
+    useEffect(() => {
+        instance.get(endpoints.getRoomById + id).then((response) => {
+            setRoom(response.data);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+            setLoading(false);
+        }
+        )
+    }, [])
 
 
     const handleNextImage = (direction: boolean) => {
         if (direction) {
-            if (currentImage < props.images.length - 1) {
+            if (currentImage < room.images.length - 1) {
                 setCurrentImage(currentImage + 1);
             } else {
                 setCurrentImage(0);
@@ -163,12 +199,12 @@ export default function RoomDetails({ params }: { params: { id: string } }) {
             if (currentImage > 0) {
                 setCurrentImage(currentImage - 1);
             } else {
-                setCurrentImage(props.images.length - 1);
+                setCurrentImage(room.images.length - 1);
             }
         }
     }
 
-    const props = {
+    const propsDummie = {
         title: 'Habitacion en bochalema',
         bathroom: 'Private',
         space: '35m2',
@@ -206,9 +242,9 @@ export default function RoomDetails({ params }: { params: { id: string } }) {
                     <General>
                         <RoomInformation>
                             <TitleSection>
-                                <h1>{props.title}</h1>
+                                <h1>{room.title}</h1>
                                 <div style={{ display: 'flex', flexGrow: 1 }}></div>
-                                <h1>{props.price}</h1>
+                                <h1>{room.price}</h1>
                             </TitleSection>
                             <ImagesSection>
                                 <FaRegCircleLeft
@@ -216,7 +252,7 @@ export default function RoomDetails({ params }: { params: { id: string } }) {
                                     style={{ cursor: 'pointer', marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }}
                                     onClick={() => handleNextImage(false)}
                                 />
-                                <Image src={props.images[currentImage]} />
+                                <Image src={room.images[currentImage]} />
                                 <FaRegCircleRight
                                     size={40}
                                     style={{ cursor: 'pointer', marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }}
@@ -227,26 +263,26 @@ export default function RoomDetails({ params }: { params: { id: string } }) {
                                 <h1 style={{ marginBottom: '1rem' }}>Information</h1>
                                 <BasicInformation>
                                     <FaBath size={20} style={{ marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{props.bathroom} Bathroom</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.bathroom} Bathroom</h3>
                                     <FaRulerCombined size={20} style={{ marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{props.space}</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.space}</h3>
                                     <FaCubes size={20} style={{ marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{props.wardrobe} Wardrobe</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.wardrobe} Wardrobe</h3>
                                     <FaLocationDot size={20} style={{ marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{props.neighborhood + " " + props.location}</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.neighborhood + " " + room.location}</h3>
                                 </BasicInformation>
-                                <p style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{props.description}</p>
+                                <p style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.description}</p>
                             </InformationSection>
                         </RoomInformation>
                         <UserInformation>
                             <img src="https://img.freepik.com/free-photo/portrait-man-laughing_23-2148859448.jpg?w=826&t=st=1700618201~exp=1700618801~hmac=99e6b3e06c8cb017515978b4af179f709a9c02fd31da035c22916632cd121ef2" style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '50%' }} />
-                            <h1 style={{ color: 'white', marginTop: '1rem' }}>{props.user.name}</h1>
+                            <h1 style={{ color: 'white', marginTop: '1rem' }}>{room.user.name}</h1>
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: '1rem' }}>
                                 <FaGraduationCap size={20} style={{ marginLeft: '1rem', margin: '1rem', color: 'rgb(255, 255, 255)' }} />
-                                <h3 style={{ color: 'rgb(255, 255, 255)', fontWeight: 'normal', width: '150px' }}>Student at {props.user.university}</h3>
+                                <h3 style={{ color: 'rgb(255, 255, 255)', fontWeight: 'normal', width: '150px' }}>Student at {room.user.university}</h3>
                             </div>
                             <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap', justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                                {props.user.personalities.map((personality: string) => {
+                                {room.user.personalities.map((personality: string) => {
                                     return (
                                         <PersonalityTag key={personality}>
                                             <p style={{ color: 'white', fontWeight: 'normal', fontSize: 13 }}>{personality}</p>

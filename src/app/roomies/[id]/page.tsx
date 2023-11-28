@@ -2,9 +2,11 @@
 import PageTemplate from "@/app/components/ui/PageTemplate"
 import styled from "styled-components";
 import '../../components/loader.css'
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import instance from "@/app/config/axios";
+import endpoints from "@/app/config/endpoints";
 
 const Container = styled.div`
     display: flex;
@@ -53,10 +55,24 @@ const Tag = styled.div`
     margin: 0.5rem;
 `;
 
-export default function Page() {
-    const [loading, setLoading] = useState(false);
+type Params = {
+    params : {
+        id: string
+    }
+}
 
-    const props = {
+export default function Page({params: {id}}: Params) {
+    const [loading, setLoading] = useState(true);
+    const [roomie, setRoomie] = useState({
+        name: '',
+        photo: '',
+        university: '',
+        career: '',
+        personalities: [],
+        hobbies: [],
+    });
+
+    const dummie = {
         name: 'Juan Jose Perez',
         photo: 'https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?w=1380&t=st=1700672496~exp=1700673096~hmac=a6f203a2e4318c98a905b4a68ab80221a217de6717fc0d91d19bf8b7c12cc705',
         university: 'Universidad de los Andes',
@@ -65,6 +81,17 @@ export default function Page() {
         hobbies: ['Futbol', 'Videojuegos', 'Cine'],
 
     }
+
+    useEffect(() => {
+        instance.get(endpoints.getRoomieById + id).then((response) => {
+            setRoomie(response.data);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+            alert('Error');
+        })
+    }, [])
+
 
     if (loading) {
         return (
@@ -82,21 +109,21 @@ export default function Page() {
             <PageTemplate>
                 <Container>
                     <General>
-                        <h2>{props.name}</h2>
+                        <h2>{roomie.name}</h2>
                         <div style={{ height: '10px' }}></div>
-                        <img src={props.photo} alt="profile" style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '50%' }} />
+                        <img src={roomie.photo} alt="profile" style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '50%' }} />
                         <InfoRow>
                             <h3 style={{ marginRight: '1rem' }}>University:</h3>
-                            <h3 style={{ fontWeight: 'normal' }}>{props.university}</h3>
+                            <h3 style={{ fontWeight: 'normal' }}>{roomie.university}</h3>
                         </InfoRow>
                         <InfoRow>
                             <h3 style={{ marginRight: '1rem' }}>Career:</h3>
-                            <h3 style={{ fontWeight: 'normal' }}> {props.career}</h3>
+                            <h3 style={{ fontWeight: 'normal' }}> {roomie.career}</h3>
                         </InfoRow>
                         <InfoRow>
                             <h3 style={{ marginRight: '1rem' }}>Personalities:</h3>
                             <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {props.personalities.map((personality, index) => {
+                                {roomie.personalities.map((personality, index) => {
                                     return (
                                         <Tag key={index}>
                                             <h3 style={{ fontWeight: 'normal' }}>{personality}</h3>
@@ -108,7 +135,7 @@ export default function Page() {
                         <InfoRow>
                             <h3 style={{ marginRight: '1rem' }}>Hobbies:</h3>
                             <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                                {props.hobbies.map((hobbie, index) => {
+                                {roomie.hobbies.map((hobbie, index) => {
                                     return (
                                         <Tag key={index}>
                                             <h3 style={{ fontWeight: 'normal' }}>{hobbie}</h3>

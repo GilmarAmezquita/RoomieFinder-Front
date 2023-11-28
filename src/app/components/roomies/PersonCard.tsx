@@ -15,6 +15,7 @@ type Props = {
   image: string;
   personalAttributes: string[];
   university: string;
+  phone: string;
 };
 
 const Personalities = styled.div`
@@ -38,7 +39,7 @@ const PersonalityTag = styled.div`
     border: 1px solid black;
 `;
 
-export default function PersonCard({ id, name, image, personalAttributes, university }: Props) {
+export default function PersonCard({ id, name, image, personalAttributes, university ,phone}: Props) {
   const router = useRouter();
   return (
     <Card sx={{ maxWidth: 345, minWidth: 300 }}>
@@ -65,7 +66,7 @@ export default function PersonCard({ id, name, image, personalAttributes, univer
         </Personalities>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-        <Link href="https://wa.me/573205785410" target="_blank">
+        <Link href={`https://wa.me/57:${phone}`} target='_blank'>
           <Button>Contact</Button>
         </Link>
         <Link href="/roomies/[id]" as={`/roomies/${id}`}>

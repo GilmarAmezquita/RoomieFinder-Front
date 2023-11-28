@@ -2,6 +2,10 @@
 import PageTemplate from "../components/ui/PageTemplate"
 import PersonCard from "../components/roomies/PersonCard"
 import styled from "styled-components"
+import { useEffect, useState } from "react"
+import "../components/loader.css"
+import instance from "../config/axios"
+import endpoints from "../config/endpoints"
 
 const persons = [
     {
@@ -70,23 +74,57 @@ const CardContainer = styled.div`
 
 
 export default function Page() {
-    return (
+    const [roomies, setRoomies] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        instance.get(endpoints.getAllRoomies).then((res) => {
+            if(res.status === 200){
+                setRoomies(res.data);
+                setLoading(false);
+            }else{
+                console.log("Error");
+                setLoading(false);
+            }
+            console.log(res);
+            
+        }).catch((err) => {
+            console.log(err);
+            setLoading(false);
+        });
+    }, []);
+
+
+    if (loading) {
         <PageTemplate>
             <Container>
-                <Title><h3>Find your perfect roommie</h3></Title>
-                <CardContainer>
-                    {persons.map((person) => (
-                        <PersonCard
-                            key={person.id}
-                            id = {person.id}
-                            name={person.name}
-                            image={person.image}
-                            personalAttributes={person.personalAttributes}
-                            university={person.university}
-                        />
-                    ))}
-                </CardContainer>
+
+                <div className="loader"></div>
             </Container>
         </PageTemplate>
-    )
+    } else {
+        return (
+            <PageTemplate>
+                <Container>
+                    <Title><h3>Find your perfect roommie</h3></Title>
+                    <CardContainer>
+                        {roomies.map((person) => (
+                            <PersonCard
+                                key={person.id}
+                                id={person.id}
+                                name={person.name}
+                                image={person.image}
+                                personalAttributes={person.personalAttributes}
+                                university={person.university}
+                                phone={person.phone}
+                            />
+                        ))}
+                        {roomies.length === 0 && <h3>No roomies found</h3>}
+                    </CardContainer>
+                </Container>
+            </PageTemplate>
+        )
+    }
+
+
 }
