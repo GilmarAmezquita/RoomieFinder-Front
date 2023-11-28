@@ -7,180 +7,187 @@ import { useEffect, useState } from "react";
 import CharacteristicTag from "../components/user/CharacteristicTag";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getAllPersonalities } from "../services/formDataConsult";
 import { signUp } from "../services/auth";
+import styled from "styled-components";
 
 const personalityTraits = [
     {
-        "name":"Introverted",
-        "icon":"🤫"
+        "name": "Introverted",
+        "icon": "🤫"
     },
     {
-        "name":"Extroverted",
-        "icon":"🗣"
+        "name": "Extroverted",
+        "icon": "🗣"
     },
     {
-        "name":"Early Bird",
-        "icon":"🐦"
+        "name": "Early Bird",
+        "icon": "🐦"
     },
     {
-        "name":"Night Owl",
-        "icon":"🦉"
+        "name": "Night Owl",
+        "icon": "🦉"
     },
     {
-        "name":"Clean",
-        "icon":"🧹"
+        "name": "Clean",
+        "icon": "🧹"
     },
     {
-        "name":"Relaxed",
-        "icon":"💫"
+        "name": "Relaxed",
+        "icon": "💫"
     },
     {
-        "name":"Love Pets",
-        "icon":"🐶"
+        "name": "Love Pets",
+        "icon": "🐶"
     },
     {
-        "name":"Far From Pets",
-        "icon":"🙅"
+        "name": "Far From Pets",
+        "icon": "🙅"
     },
     {
-        "name":"Allergies",
-        "icon":"🤧"
+        "name": "Allergies",
+        "icon": "🤧"
     },
     {
-        "name":"No Allergies",
-        "icon":"👍"
+        "name": "No Allergies",
+        "icon": "👍"
     },
     {
-        "name":"Quiet",
-        "icon":"🤫"
+        "name": "Quiet",
+        "icon": "🤫"
     },
     {
-        "name":"Loud",
-        "icon":"🗣"
+        "name": "Loud",
+        "icon": "🗣"
     },
     {
-        "name":"Likes to share",
-        "icon":"🤝"
+        "name": "Likes to share",
+        "icon": "🤝"
     },
     {
-        "name":"Likes to keep to self",
-        "icon":"🤐"
+        "name": "Likes to keep to self",
+        "icon": "🤐"
     }
 ]
 
 const hobbiesOptions = [
     {
-        "name":"Gym",
-        "icon":"🏋️‍♂️"
+        "name": "Gym",
+        "icon": "🏋️‍♂️"
     },
     {
-        "name":"Sports",
-        "icon":"⚽️"
+        "name": "Sports",
+        "icon": "⚽️"
     },
     {
-        "name":"Video Games",
-        "icon":"🎮"
+        "name": "Video Games",
+        "icon": "🎮"
     },
     {
-        "name":"Reading",
-        "icon":"📚"
+        "name": "Reading",
+        "icon": "📚"
     },
     {
-        "name":"Movies",
-        "icon":"🎥"
+        "name": "Movies",
+        "icon": "🎥"
     },
     {
-        "name":"Music",
-        "icon":"🎵"
+        "name": "Music",
+        "icon": "🎵"
     },
     {
-        "name":"Cooking",
-        "icon":"👨‍🍳"
+        "name": "Cooking",
+        "icon": "👨‍🍳"
     },
     {
-        "name":"Baking",
-        "icon":"👩‍🍳"
+        "name": "Baking",
+        "icon": "👩‍🍳"
     },
     {
-        "name":"Art",
-        "icon":"🎨"
+        "name": "Art",
+        "icon": "🎨"
     },
     {
-        "name":"Photography",
-        "icon":"📸"
+        "name": "Photography",
+        "icon": "📸"
     },
     {
-        "name":"Writing",
-        "icon":"✍️"
+        "name": "Writing",
+        "icon": "✍️"
     },
     {
-        "name":"Dancing",
-        "icon":"💃"
+        "name": "Dancing",
+        "icon": "💃"
     },
     {
-        "name":"Singing",
-        "icon":"🎤"
+        "name": "Singing",
+        "icon": "🎤"
     },
     {
-        "name":"Shopping",
-        "icon":"🛍"
+        "name": "Shopping",
+        "icon": "🛍"
     },
     {
-        "name":"Traveling",
-        "icon":"🧳"
+        "name": "Traveling",
+        "icon": "🧳"
     },
     {
-        "name":"Hiking",
-        "icon":"🥾"
+        "name": "Hiking",
+        "icon": "🥾"
     },
     {
-        "name":"Camping",
-        "icon":"⛺️"
+        "name": "Camping",
+        "icon": "⛺️"
     },
     {
-        "name":"Gardening",
-        "icon":"🌱"
+        "name": "Gardening",
+        "icon": "🌱"
     },
     {
-        "name":"Volunteering",
-        "icon":"🤝"
+        "name": "Volunteering",
+        "icon": "🤝"
     },
     {
-        "name":"Meditation",
-        "icon":"🧘‍♂️"
+        "name": "Meditation",
+        "icon": "🧘‍♂️"
     },
     {
-        "name":"Yoga",
-        "icon":"🧘‍♀️"
+        "name": "Yoga",
+        "icon": "🧘‍♀️"
     },
     {
-        "name":"Board Games",
-        "icon":"🎲"
+        "name": "Board Games",
+        "icon": "🎲"
     },
     {
-        "name":"Card Games",
-        "icon":"🃏"
+        "name": "Card Games",
+        "icon": "🃏"
     },
     {
-        "name":"Chess",
-        "icon":"♟"
+        "name": "Chess",
+        "icon": "♟"
     },
     {
-        "name":"Puzzles",
-        "icon":"🧩"
+        "name": "Puzzles",
+        "icon": "🧩"
     },
     {
-        "name":"Skiing",
-        "icon":"⛷"
+        "name": "Skiing",
+        "icon": "⛷"
     },
 ]
 
-
+const PictureSection = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+`
 
 
 export default function Register() {
-    const [personalities, setPersonalities] = useState([]);
+    const [picture, setPicture] = useState<File | null>(null);
+    const [pictureBase64, setPictureBase64] = useState<string>("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -193,10 +200,17 @@ export default function Register() {
     const router = useRouter();
 
     const handleRegister = () => {
-        if (name == "" || email == "" || password == "" || phoneNumber == "" || traits.length == 0 || hobbies.length == 0 || university == "") {
+        
+        
+        if (name == "" || email == "" || password == "" || phoneNumber == "" || traits.length == 0 || hobbies.length == 0 || university == "" || picture == null) {
             alertError("Please fill out all fields");
             
-        }else{
+        } else {
+            Promise.all([blobToBase64(picture)]).then((res) => {
+                console.log(res.toString());
+                setPictureBase64(res.toString());
+            }
+            )
             signUp({
                 name,
                 email,
@@ -204,6 +218,9 @@ export default function Register() {
                 phoneNumber,
                 traits,
                 hobbies,
+                university,
+                pictureBase64
+
             }).then(() => {
                 alertSuccess("Successfully registered!");
                 router.push("/login");
@@ -211,6 +228,19 @@ export default function Register() {
                 alertError("User already exists");
             })
         }
+    }
+
+    function blobToBase64(blob: any) {
+        return new Promise((resolve, _) => {
+            const reader = new FileReader();
+            reader.onerror = () => {
+                resolve(null)
+                console.log("error");
+            };
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+            
+        });
     }
 
     const changeStep = (step: number, direction: number) => {
@@ -267,6 +297,16 @@ export default function Register() {
                         <Typography variant="subtitle1" align="left" gutterBottom>
                             Hobbie Information
                         </Typography>
+                        <PictureSection>
+                            <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
+                                Add a profile picture:
+                            </Typography>
+                            <div className={styles.options}>
+                                <input type="file" accept="image/*" onChange={(e) => {e.target.files != null && setPicture(e.target.files[0])}} />
+                            </div>
+                            {picture && <img src={URL.createObjectURL(picture)} style={{ width: '100px', height: '100px', borderRadius: '50%' }} />}
+
+                        </PictureSection>
                         <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
                             What do you do in your free time?
                         </Typography>
@@ -299,7 +339,7 @@ export default function Register() {
                         marginBottom: '15px'
                     }} />
                     {renderStep()}
-                    <div style={{ position: 'absolute', bottom: '0px', width: '100%', marginLeft: -48, height: '100px',display: 'flex', alignItems: 'center', justifyContent:'flex-start',flexDirection: 'column' }}>
+                    <div style={{ position: 'absolute', bottom: '0px', width: '100%', marginLeft: -48, height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'column' }}>
                         <div>
                             <Typography variant="subtitle2" align="left" gutterBottom color="textSecondary">
                                 Step {step + 1} of 3
