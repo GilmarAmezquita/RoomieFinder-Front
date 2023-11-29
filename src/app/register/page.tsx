@@ -206,9 +206,6 @@ export default function Register() {
             alertError("Please fill out all fields");
 
         } else {
-            Promise.all([blobToBase64(picture)]).then((res) => {
-                setPictureBase64(res.toString());
-            })
             signUp({
                 name,
                 email,
@@ -217,7 +214,7 @@ export default function Register() {
                 hobbies,
                 traits,
                 university,
-                image:pictureBase64
+                image: pictureBase64
             }).then(() => {
                 alertSuccess("Successfully registered!");
                 router.push("/login");
@@ -240,6 +237,12 @@ export default function Register() {
 
         });
     }
+
+    useEffect(() => {
+        Promise.all([blobToBase64(picture)]).then((res) => {
+            setPictureBase64(res.toString());
+        })
+    }, [picture])
 
     const changeStep = (step: number, direction: number) => {
         switch (direction) {
