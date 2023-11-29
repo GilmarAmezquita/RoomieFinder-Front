@@ -263,7 +263,7 @@ export default function RoomDetails({params: {id}}: Params) {
                         </RoomInformation>
                         <UserInformation>
                             <img src={room?.owner?.image} style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '50%' }} />
-                            <h1 style={{ color: 'white', marginTop: '1rem' }}>{}</h1>
+                            <h1 style={{ color: 'white', marginTop: '1rem' }}>{room?.owner?.name}</h1>
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: '1rem' }}>
                                 <FaGraduationCap size={20} style={{ marginLeft: '1rem', margin: '1rem', color: 'rgb(255, 255, 255)' }} />
                                 <h3 style={{ color: 'rgb(255, 255, 255)', fontWeight: 'normal', width: '150px' }}>Student at {room?.owner?.university}</h3>
