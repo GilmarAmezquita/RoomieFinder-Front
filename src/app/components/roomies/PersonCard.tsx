@@ -42,7 +42,7 @@ const PersonalityTag = styled.div`
 export default function PersonCard({ id, name, image, personalAttributes, university ,phone}: Props) {
   const router = useRouter();
   return (
-    <Card sx={{ maxWidth: 345, minWidth: 300 }}>
+    <Card sx={{ maxWidth: 345, minWidth: 300, margin:'0.5rem' }}>
       <CardMedia
         sx={{ height: 140 }}
         image={image}

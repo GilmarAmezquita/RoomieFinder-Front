@@ -23,6 +23,7 @@ const settings = [ 'Logout'];
 function Navbar() {
     const router = useRouter();
     const [token, setToken] = React.useState<any>(null);
+    const [user, setUser] = React.useState<any>(null);
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -52,9 +53,11 @@ function Navbar() {
     React.useEffect(() => {
         function checkUserData() {
             const item = localStorage.getItem('token')
-        
+            const user = localStorage.getItem('user')
             if (item) {
               setToken(item)
+              setUser(user)
+              console.log(user);
             }
           }
           checkUserData()
@@ -63,15 +66,17 @@ function Navbar() {
           return () => {
             window.removeEventListener('storage', checkUserData)
           }
+          
     }, [])
 
     const renderUser = () => {
-        if (token !== null) {
+        if (token !== null && user !== null) {
             return (
                 <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                            <Typography textAlign="center" color="white" sx={{ mr: 1 }}>{JSON.parse(user).name}</Typography>
+                            <Avatar alt="Remy Sharp" src={JSON.parse(user).image} sx={{ width: 32, height: 32 }}/>
                         </IconButton>
                     </Tooltip>
                     <Menu

@@ -68,7 +68,8 @@ const CardContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     width: 90%;
     margin-bottom: 2rem;
 `;
@@ -81,9 +82,14 @@ export default function Page() {
     useEffect(() => {
         instance.get(endpoints.getAllRoomies).then((res) => {
             if(res.status === 200 && res.data){
-                console.log("Data:");   
-                setRoomies(res.data);
-                console.log(res.data);
+                if(localStorage.getItem('user')){
+                    const user = JSON.parse(localStorage.getItem('user') as string);
+                    const filteredData = res.data.filter((person: any) => person._id !== user._id);
+                    setRoomies(filteredData);
+                    console.log(filteredData);
+                }else{
+                    setRoomies(res.data);
+                }
                 setLoading(false);
             }else{
                 console.log("Error");
