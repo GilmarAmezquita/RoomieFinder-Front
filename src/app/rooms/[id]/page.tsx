@@ -252,7 +252,7 @@ export default function RoomDetails({params: {id}}: Params) {
                                     style={{ cursor: 'pointer', marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }}
                                     onClick={() => handleNextImage(false)}
                                 />
-                                <Image src={room.images[currentImage]} />
+                                <Image src={URL.createObjectURL(room.images[currentImage])} />
                                 <FaRegCircleRight
                                     size={40}
                                     style={{ cursor: 'pointer', marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }}

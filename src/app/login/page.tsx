@@ -23,7 +23,8 @@ export default function Login() {
             password
         }).then((res) => {
             if (res.status === 201) {
-                router.push('/home');
+                localStorage.setItem('token', res.data.token);
+                router.push('/');
             }
         }
         ).catch((err) => {

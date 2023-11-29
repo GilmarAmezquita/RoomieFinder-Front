@@ -18,11 +18,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const pages = ['Rooms', 'Roomies'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = [ 'Logout'];
 
 function Navbar() {
     const router = useRouter();
-    const session = false;
+    const [session, setSession] = React.useState<any>({});
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -39,10 +39,20 @@ function Navbar() {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+        localStorage.removeItem('token');
+        setSession(null);
     };
 
+    React.useEffect(() => {
+        window.addEventListener('storage', () => {
+            // When local storage changes, dump the list to
+            // the console.
+            setSession(JSON.parse(localStorage.getItem('token') || '{}'));
+          });
+    }, [])
+
     const renderUser = () => {
-        if (session) {
+        if (session !== null) {
             return (
                 <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">

@@ -87,6 +87,15 @@ export default function Page() {
         })
     }, [])
 
+    const handlePublishRoom = () => {
+        if(localStorage.getItem('token') === null){
+            alert('You need to be logged in to publish a room')
+            router.push('/login')
+            return
+        }
+        router.push('/rooms/new')
+    }
+
     return (
         <PageTemplate>
             <div className={styles.container}>
@@ -97,6 +106,7 @@ export default function Page() {
                 <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: '100%', paddingLeft: '3rem', paddingRight: '3rem', alignItems: 'flex-start' }}>
 
                     <LocationContainer >
+                        {rooms.length === 0 && <h1>No rooms found</h1>}
                         {rooms.map((room) => (
                             <RoomCard
                                 key={room.title}
@@ -111,13 +121,13 @@ export default function Page() {
                         ))}
                     </LocationContainer>
                 </div>
-                <Link href="/rooms/new">
+                
                 <Button 
                     variant="contained" 
                     style={{ position: 'fixed', bottom: '2rem', right: '2rem', backgroundColor: '#000', color: '#fff' }}
-                    
-                    >Publish a room</Button>
-                </Link>
+                    onClick={handlePublishRoom}
+                >Publish a room</Button>
+                
 
             </div>
         </PageTemplate>

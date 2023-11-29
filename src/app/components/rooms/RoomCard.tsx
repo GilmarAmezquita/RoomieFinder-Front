@@ -11,7 +11,7 @@ import WhatshotIcon from '@mui/icons-material/Whatshot';
 type Props = {
     title: string;
     description: string;
-    image: string;
+    image: any;
     price: number;
     personalAttributes: string[];
     match: boolean;
@@ -42,7 +42,7 @@ export default function RoomCard(props: Props) {
                 
                 <CardMedia
                     sx={{ height: 140}}
-                    image={props.image}
+                    image={URL.createObjectURL(props.image)}
                     title="Room Image"
                 />
                 <MatchTag>

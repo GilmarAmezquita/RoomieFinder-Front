@@ -12,7 +12,7 @@ import Link from 'next/link';
 type Props = {
   id: string;
   name: string;
-  image: string;
+  image: any;
   personalAttributes: string[];
   university: string;
   phone: string;
@@ -56,7 +56,7 @@ export default function PersonCard({ id, name, image, personalAttributes, univer
           {university}
         </Typography>
         <Personalities>
-          {personalAttributes.map((attribute) => (
+          {personalAttributes?.map((attribute) => (
             <PersonalityTag key={attribute}>
               <Typography variant="body2" color="text.secondary">
                 {attribute}
@@ -66,7 +66,7 @@ export default function PersonCard({ id, name, image, personalAttributes, univer
         </Personalities>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-        <Link href={`https://wa.me/57:${phone}`} target='_blank'>
+        <Link href={`https://wa.me/57${phone}`} target='_blank'>
           <Button>Contact</Button>
         </Link>
         <Link href="/roomies/[id]" as={`/roomies/${id}`}>

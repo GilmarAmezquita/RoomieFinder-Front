@@ -103,8 +103,8 @@ const VisuallyHiddenInput = styled.input`
 
 
 export default function Page() {
-    const [images, setImages] = useState<File[]>([]);
-    const [imagesBase64, setImagesBase64] = useState<string[]>([]);
+    const [imagesFiles, setImages] = useState<File[]>([]);
+    const [images, setImagesBase64] = useState<string[]>([]);
     const titleRef = useRef<any>("");
     const priceRef = useRef<any>("");
     const bathroomRef = useRef<any>("");
@@ -112,9 +112,9 @@ export default function Page() {
     const wardrobeRef = useRef<any>("");
     const addressRef = useRef<any>("");
     const descriptionRef = useRef<any>("");
+    const router = useRouter();
 
     const handleSubmit = () => {
-        const router = useRouter();
         const title = titleRef.current.value;
         const price = priceRef.current.value;
         const bathroom = bathroomRef.current.value;
@@ -123,31 +123,34 @@ export default function Page() {
         const address = addressRef.current.value;
         const description = descriptionRef.current.value;
 
-        const data = {
-            title,
-            price,
-            bathroom,
-            space,
-            wardrobe,
-            address,
-            description,
-            images
-        };
-        if (title === "" || price === "" || bathroom === "" || space === "" || wardrobe === "" || address === "" || description === "" || images.length === 0) {
+
+        if (title === "" || price === "" || bathroom === "" || space === "" || wardrobe === "" || address === "" || description === "" || imagesFiles.length === 0) {
             alert("Please fill all the fields");
             return;
         } else {
-            Promise.all(images.map(blobToBase64)).then((results) => { 
-                setImagesBase64(results.map((result:any) => result.toString())); 
-            });
 
+            Promise.all(imagesFiles.map(blobToBase64)).then((results) => {
+                setImagesBase64(results.map((result: any) => result.toString()));
 
-            instance.post(endpoints.newRoom, data).then((response) => {
-                console.log(response);
-                alert("Room published");
-                router.push("/rooms");
-            }).catch((error) => {
-                console.log(error);
+            }).then(() => {
+                const data = {
+                    title,
+                    price,
+                    bathroom,
+                    space,
+                    wardrobe,
+                    address,
+                    description,
+                    images
+                };
+                console.log(data);
+                instance.post(endpoints.newRoom, data).then((response) => {
+                    console.log(response);
+                    alert("Room published");
+                    router.push("/rooms");
+                }).catch((error) => {
+                    console.log(error);
+                })
             })
         }
 
@@ -164,7 +167,7 @@ export default function Page() {
             };
             reader.onloadend = () => resolve(reader.result);
             reader.readAsDataURL(blob);
-            
+
         });
     }
 
@@ -234,13 +237,13 @@ export default function Page() {
                     </Information>
                     <Images>
                         <Title>Images</Title>
-                        {images.map((image) => (
+                        {imagesFiles.map((image) => (
                             <ImageFile key={image.name}>
                                 {image.name}
                                 <div style={{ display: 'flex', flexGrow: 1 }}></div>
                                 <Button variant="contained" sx={{ backgroundColor: 'rgb(255, 255, 255)', color: 'black', marginRight: '1rem' }}
                                     onClick={() => {
-                                        setImages(images.filter((item) => item !== image));
+                                        setImages(imagesFiles.filter((item) => item !== image));
 
                                     }
                                     }
@@ -256,14 +259,14 @@ export default function Page() {
                                 onChange={(event) => {
                                     if (event.target.files && event.target.files[0]) {
                                         const file = event.target.files[0];
-                                        setImages([...images, file]);
+                                        setImages([...imagesFiles, file]);
                                     }
 
                                 }}
                             />
                             Add image
                         </Button>
-                        <Button onClick={() => console.log(imagesBase64)}>
+                        <Button onClick={() => console.log(images)}>
                             check
                         </Button>
                     </Images>

@@ -200,11 +200,11 @@ export default function Register() {
     const router = useRouter();
 
     const handleRegister = () => {
-        
-        
+
+
         if (name == "" || email == "" || password == "" || phoneNumber == "" || traits.length == 0 || hobbies.length == 0 || university == "" || picture == null) {
             alertError("Please fill out all fields");
-            
+
         } else {
             Promise.all([blobToBase64(picture)]).then((res) => {
                 setPictureBase64(res.toString());
@@ -223,7 +223,7 @@ export default function Register() {
                 router.push("/login");
             }).catch((err) => {
                 console.log(err);
-                alertError("User already exists");
+                alert("User already exists");
             })
         }
     }
@@ -237,7 +237,7 @@ export default function Register() {
             };
             reader.onloadend = () => resolve(reader.result);
             reader.readAsDataURL(blob);
-            
+
         });
     }
 
@@ -300,7 +300,7 @@ export default function Register() {
                                 Add a profile picture:
                             </Typography>
                             <div className={styles.options}>
-                                <input type="file" accept="image/*" onChange={(e) => {e.target.files != null && setPicture(e.target.files[0])}} />
+                                <input type="file" accept="image/*" onChange={(e) => { e.target.files != null && setPicture(e.target.files[0]) }} />
                             </div>
                             {picture && <img src={URL.createObjectURL(picture)} style={{ width: '100px', height: '100px', borderRadius: '50%' }} />}
 

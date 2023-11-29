@@ -1,5 +1,5 @@
 var endpoints = {
-    "getAllRooms": "/api/rooms",
+    "getAllRooms": "/api/room",
     //Tiene que devolver el siguiente json: arreglo de los siguientes jsons
     // {
     //      
@@ -11,7 +11,7 @@ var endpoints = {
     //      
     //      id : string
     //}
-    "getRoomById": "/api/rooms/",
+    "getRoomById": "/api/room/",
     //Tiene que devolver el siguiente json:
     // {
     //      title: string

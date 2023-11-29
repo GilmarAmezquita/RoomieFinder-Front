@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import "../components/loader.css"
 import instance from "../config/axios"
 import endpoints from "../config/endpoints"
+import { json } from "stream/consumers"
 
 const persons = [
     {
@@ -79,8 +80,10 @@ export default function Page() {
 
     useEffect(() => {
         instance.get(endpoints.getAllRoomies).then((res) => {
-            if(res.status === 200){
+            if(res.status === 200 && res.data){
+                console.log("Data:");   
                 setRoomies(res.data);
+                console.log(res.data);
                 setLoading(false);
             }else{
                 console.log("Error");
@@ -108,15 +111,15 @@ export default function Page() {
                 <Container>
                     <Title><h3>Find your perfect roommie</h3></Title>
                     <CardContainer>
-                        {roomies.map((person) => (
+                        {roomies?.map((person) => (
                             <PersonCard
                                 key={person.id}
-                                id={person.id}
+                                id={person._id}
                                 name={person.name}
                                 image={person.image}
                                 personalAttributes={person.personalAttributes}
                                 university={person.university}
-                                phone={person.phone}
+                                phone={person.phoneNumber}
                             />
                         ))}
                         {roomies.length === 0 && <h3>No roomies found</h3>}
