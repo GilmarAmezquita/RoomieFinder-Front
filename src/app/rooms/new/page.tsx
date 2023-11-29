@@ -116,7 +116,7 @@ export default function Page() {
 
     const handleSubmit = () => {
         const title = titleRef.current.value;
-        const price = priceRef.current.value;
+        const priceStr = priceRef.current.value;
         const bathroom = bathroomRef.current.value;
         const space = spaceRef.current.value;
         const wardrobe = wardrobeRef.current.value;
@@ -124,7 +124,7 @@ export default function Page() {
         const description = descriptionRef.current.value;
 
 
-        if (title === "" || price === "" || bathroom === "" || space === "" || wardrobe === "" || address === "" || description === "" || imagesFiles.length === 0) {
+        if (title === "" || priceStr === "" || bathroom === "" || space === "" || wardrobe === "" || address === "" || description === "" || imagesFiles.length === 0) {
             alert("Please fill all the fields");
             return;
         } else {
@@ -133,6 +133,7 @@ export default function Page() {
                 setImagesBase64(results.map((result: any) => result.toString()));
 
             }).then(() => {
+                const price = parseInt(priceStr);
                 const data = {
                     title,
                     price,
@@ -141,7 +142,8 @@ export default function Page() {
                     wardrobe,
                     address,
                     description,
-                    images
+                    images,
+                    owner: JSON.parse(localStorage.getItem('user') || "{}")._id
                 };
                 console.log(data);
                 instance.post(endpoints.newRoom, data).then((response) => {
@@ -178,7 +180,7 @@ export default function Page() {
                     <Information>
                         <Title>Publish your room</Title>
                         <TextField id="outlined-basic" label="Title" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} inputRef={titleRef} />
-                        <TextField id="outlined-basic" label="Price" variant="outlined" sx={{ minWidth: '60%', marginBottom: '2rem' }} inputRef={priceRef} />
+                        <TextField id="outlined-basic" label="Price" variant="outlined" type="number" sx={{ minWidth: '60%', marginBottom: '2rem' }} inputRef={priceRef} />
                         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: '100%', marginBottom: '2rem' }}>
                             <FaBath style={{ fontSize: '2rem', color: 'rgb(106, 158, 255)', marginRight: '1rem' }} />
                             <TextField

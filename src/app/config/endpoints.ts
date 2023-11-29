@@ -30,7 +30,7 @@ var endpoints = {
     //          university: string
     //       }
     //}
-    "newRoom": "/api/rooms",
+    "newRoom": "/api/room",
     //Tiene que recibir el siguiente json: es un POST
     //      data = {
     //          title : string

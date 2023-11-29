@@ -82,6 +82,7 @@ export default function Page() {
     useEffect(() => {
         instance.get(endpoints.getAllRooms).then((res) => {
             setRooms(res.data)
+            console.log(res.data)
         }).catch((err) => {
             console.log(err)
         })
@@ -112,11 +113,11 @@ export default function Page() {
                                 key={room.title}
                                 title={room.title}
                                 description={room.description}
-                                image={room.image}
+                                image={room.images[0]}
                                 price={room.price}
                                 personalAttributes={room.personalAttributes}
                                 match={false}
-                                id={room.id}
+                                id={room._id}
                             />
                         ))}
                     </LocationContainer>

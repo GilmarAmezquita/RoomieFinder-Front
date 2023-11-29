@@ -22,7 +22,7 @@ const settings = [ 'Logout'];
 
 function Navbar() {
     const router = useRouter();
-    const [session, setSession] = React.useState<any>({});
+    const [token, setToken] = React.useState<any>(null);
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -39,20 +39,34 @@ function Navbar() {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
-        localStorage.removeItem('token');
-        setSession(null);
+        
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setToken(null);
+
+    }
+
     React.useEffect(() => {
-        window.addEventListener('storage', () => {
-            // When local storage changes, dump the list to
-            // the console.
-            setSession(JSON.parse(localStorage.getItem('token') || '{}'));
-          });
+        function checkUserData() {
+            const item = localStorage.getItem('token')
+        
+            if (item) {
+              setToken(item)
+            }
+          }
+          checkUserData()
+          window.addEventListener('storage', checkUserData)
+        
+          return () => {
+            window.removeEventListener('storage', checkUserData)
+          }
     }, [])
 
     const renderUser = () => {
-        if (session !== null) {
+        if (token !== null) {
             return (
                 <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
@@ -76,11 +90,11 @@ function Navbar() {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                     >
-                        {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                <Typography textAlign="center">{setting}</Typography>
+                        
+                            <MenuItem  onClick={handleLogout}>
+                                <Typography textAlign="center">Log Out</Typography>
                             </MenuItem>
-                        ))}
+                        
                     </Menu>
                 </Box>
             )

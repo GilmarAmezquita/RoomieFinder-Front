@@ -13,6 +13,7 @@ import endpoints from "@/app/config/endpoints";
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import '../../components/loader.css'
+import Link from "next/link";
 
 
 
@@ -168,17 +169,20 @@ export default function RoomDetails({params: {id}}: Params) {
         neighborhood: '',
         location: '',
         description: '',
-        user: {
+        owner: {
             name: '',
             city: '',
-            personalities: [],
+            traits: [],
             university: '',
+            image: '',
+            phoneNumber: ''
         }
     });
 
     useEffect(() => {
         instance.get(endpoints.getRoomById + id).then((response) => {
             setRoom(response.data);
+            console.log(response.data);
             setLoading(false);
         }).catch((error) => {
             console.log(error);
@@ -204,24 +208,7 @@ export default function RoomDetails({params: {id}}: Params) {
         }
     }
 
-    const propsDummie = {
-        title: 'Habitacion en bochalema',
-        bathroom: 'Private',
-        space: '35m2',
-        wardrobe: 'Has',
-        images: ['https://img.freepik.com/free-photo/3d-rendering-loft-scandinavian-living-room-with-working-table-bookshelf_105762-2162.jpg?w=1380&t=st=1700615800~exp=1700616400~hmac=fcb202af68245dab171f94171b755fbe293e37ce859a6828a78f2e4def338651', 'https://img.freepik.com/free-photo/japandi-living-room-interior-design_53876-145502.jpg?w=1380&t=st=1700616445~exp=1700617045~hmac=d747ff0d8c0e00dd56ab77cc6a637d906180ef5ddafa6ab5a58d8c9ac3067a59', 'https://img.freepik.com/free-photo/3d-rendering-loft-luxury-living-room-with-bookshelf-near-bookshelf_105762-2224.jpg?w=1380&t=st=1700616455~exp=1700617055~hmac=d861859980cc1a049522569268ac09a826c49b35c28569676b5b57e92ee8a19a'],
-        price: '$ 1.000.000',
-        neighborhood: 'Bochalema',
-        location: 'Calle 5 # 5-5',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis ultricies nisl nisl nec nisl. Sed euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis ultricies nisl nisl nec nisl. Sed euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis ultricies nisl nisl nec nisl. Sed euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis ultricies nisl nisl nec nisl. Sed euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis ultricies nisl nisl nec nisl. Sed euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis ultricies nisl nisl nec nisl. Sed euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis ultricies nisl nisl nec nisl.',
-        user: {
-            name: 'Juan David',
-            city: 'Bogota',
-            personalities: ['Clean', 'Organized', 'Respectful', 'Friendly'],
-            university: 'Universidad de los Andes',
-        }
-
-    }
+   
 
     if (loading) {
         return (
@@ -242,9 +229,9 @@ export default function RoomDetails({params: {id}}: Params) {
                     <General>
                         <RoomInformation>
                             <TitleSection>
-                                <h1>{room.title}</h1>
+                                <h1>{room?.title}</h1>
                                 <div style={{ display: 'flex', flexGrow: 1 }}></div>
-                                <h1>{room.price}</h1>
+                                <h1>$ {room?.price}</h1>
                             </TitleSection>
                             <ImagesSection>
                                 <FaRegCircleLeft
@@ -252,7 +239,7 @@ export default function RoomDetails({params: {id}}: Params) {
                                     style={{ cursor: 'pointer', marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }}
                                     onClick={() => handleNextImage(false)}
                                 />
-                                <Image src={URL.createObjectURL(room.images[currentImage])} />
+                                <Image src={room?.images[currentImage]} />
                                 <FaRegCircleRight
                                     size={40}
                                     style={{ cursor: 'pointer', marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }}
@@ -263,26 +250,26 @@ export default function RoomDetails({params: {id}}: Params) {
                                 <h1 style={{ marginBottom: '1rem' }}>Information</h1>
                                 <BasicInformation>
                                     <FaBath size={20} style={{ marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.bathroom} Bathroom</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room?.bathroom} Bathroom</h3>
                                     <FaRulerCombined size={20} style={{ marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.space}</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room?.space}</h3>
                                     <FaCubes size={20} style={{ marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.wardrobe} Wardrobe</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room?.wardrobe} Wardrobe</h3>
                                     <FaLocationDot size={20} style={{ marginLeft: '1rem', marginRight: '1rem', color: 'rgb(148, 148, 148)' }} />
-                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.neighborhood + " " + room.location}</h3>
+                                    <h3 style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room?.neighborhood + " " + room?.location}</h3>
                                 </BasicInformation>
-                                <p style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room.description}</p>
+                                <p style={{ color: 'rgb(125, 125, 125)', fontWeight: 'normal' }}>{room?.description}</p>
                             </InformationSection>
                         </RoomInformation>
                         <UserInformation>
-                            <img src="https://img.freepik.com/free-photo/portrait-man-laughing_23-2148859448.jpg?w=826&t=st=1700618201~exp=1700618801~hmac=99e6b3e06c8cb017515978b4af179f709a9c02fd31da035c22916632cd121ef2" style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '50%' }} />
-                            <h1 style={{ color: 'white', marginTop: '1rem' }}>{room.user.name}</h1>
+                            <img src={room?.owner?.image} style={{ width: '250px', height: '250px', objectFit: 'cover', borderRadius: '50%' }} />
+                            <h1 style={{ color: 'white', marginTop: '1rem' }}>{}</h1>
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: '1rem' }}>
                                 <FaGraduationCap size={20} style={{ marginLeft: '1rem', margin: '1rem', color: 'rgb(255, 255, 255)' }} />
-                                <h3 style={{ color: 'rgb(255, 255, 255)', fontWeight: 'normal', width: '150px' }}>Student at {room.user.university}</h3>
+                                <h3 style={{ color: 'rgb(255, 255, 255)', fontWeight: 'normal', width: '150px' }}>Student at {room?.owner?.university}</h3>
                             </div>
                             <div style={{ display: 'flex', width: '100%', flexWrap: 'wrap', justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                                {room.user.personalities.map((personality: string) => {
+                                {room?.owner?.traits.map((personality: string) => {
                                     return (
                                         <PersonalityTag key={personality}>
                                             <p style={{ color: 'white', fontWeight: 'normal', fontSize: 13 }}>{personality}</p>
@@ -291,8 +278,9 @@ export default function RoomDetails({params: {id}}: Params) {
                                 }
                                 )}
                             </div>
+                            <Link href={`https://wa.me/${room?.owner?.phoneNumber}`}>
                             <Button variant="contained" style={{ backgroundColor: 'white', color: 'rgb(106, 158, 255)', marginTop: '1rem', width: '80%', fontWeight: 'bold' }}>Contact</Button>
-
+                            </Link>
                         </UserInformation>
 
                     </General>

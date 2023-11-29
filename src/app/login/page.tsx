@@ -23,7 +23,9 @@ export default function Login() {
             password
         }).then((res) => {
             if (res.status === 201) {
+                console.log(res.data);
                 localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
                 router.push('/');
             }
         }
