@@ -207,10 +207,8 @@ export default function Register() {
             
         } else {
             Promise.all([blobToBase64(picture)]).then((res) => {
-                console.log(res.toString());
                 setPictureBase64(res.toString());
-            }
-            )
+            })
             signUp({
                 name,
                 email,
@@ -219,7 +217,7 @@ export default function Register() {
                 hobbies,
                 traits,
                 university,
-                pictureBase64
+                image:pictureBase64
             }).then(() => {
                 alertSuccess("Successfully registered!");
                 router.push("/login");
